@@ -147,9 +147,6 @@ export function ScholarSyncApp() {
           onSelectTab={setCurrentTab}
           semesterText={userSettings.semester}
           isDemoActive={hasDemoData}
-          creatorName={userSettings.creatorName || 'Angad Ranjan'}
-          creatorGithubUrl={userSettings.creatorGithubUrl || 'https://github.com/angad-r'}
-          creatorLinkedinUrl={userSettings.creatorLinkedinUrl || 'https://in.linkedin.com/in/angad-ranjan-057616380'}
         />
       </div>
 
@@ -160,9 +157,6 @@ export function ScholarSyncApp() {
         currentTab={currentTab}
         onSelectTab={setCurrentTab}
         semesterText={userSettings.semester}
-        creatorName={userSettings.creatorName || 'Angad Ranjan'}
-        creatorGithubUrl={userSettings.creatorGithubUrl || 'https://github.com/angad-r'}
-        creatorLinkedinUrl={userSettings.creatorLinkedinUrl || 'https://in.linkedin.com/in/angad-ranjan-057616380'}
       />
 
       {/* Main Content Area */}
@@ -186,9 +180,6 @@ export function ScholarSyncApp() {
           theme={userSettings.theme}
           onToggleTheme={toggleTheme}
           hasSubjects={subjects.length > 0}
-          creatorName={userSettings.creatorName || 'Angad Ranjan'}
-          creatorGithubUrl={userSettings.creatorGithubUrl || 'https://github.com/angad-r'}
-          creatorLinkedinUrl={userSettings.creatorLinkedinUrl || 'https://in.linkedin.com/in/angad-ranjan-057616380'}
         />
 
         <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">

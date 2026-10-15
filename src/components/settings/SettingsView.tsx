@@ -21,6 +21,7 @@ import {
   requestBrowserNotificationPermission,
   getBrowserNotificationState,
 } from '../../lib/notificationService';
+import { PLATFORM_CREATOR } from '../../config/creator';
 import {
   Settings,
   Download,
@@ -74,13 +75,6 @@ export function SettingsView({
   const [studyBudget, setStudyBudget] = useState(userSettings.studyBudgetHoursPerDay);
   const [isSavingSettings, setIsSavingSettings] = useState(false);
 
-  // Creator & Social Links State
-  const [creatorName, setCreatorName] = useState(userSettings.creatorName || 'Angad Ranjan');
-  const [creatorGithubUrl, setCreatorGithubUrl] = useState(userSettings.creatorGithubUrl || 'https://github.com/angad-r');
-  const [creatorLinkedinUrl, setCreatorLinkedinUrl] = useState(userSettings.creatorLinkedinUrl || 'https://in.linkedin.com/in/angad-ranjan-057616380');
-  const [isSavingCreator, setIsSavingCreator] = useState(false);
-  const [creatorSavedSuccess, setCreatorSavedSuccess] = useState(false);
-
   // Import flow state
   const [importFile, setImportFile] = useState<File | null>(null);
   const [importPreview, setImportPreview] = useState<ImportPreview | null>(null);
@@ -107,23 +101,6 @@ export function SettingsView({
       });
     } finally {
       setIsSavingSettings(false);
-    }
-  };
-
-  const handleSaveCreatorLinks = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSavingCreator(true);
-    setCreatorSavedSuccess(false);
-    try {
-      await onUpdateSettings({
-        creatorName: creatorName.trim() || 'Angad Ranjan',
-        creatorGithubUrl: creatorGithubUrl.trim() || 'https://github.com/angad-r',
-        creatorLinkedinUrl: creatorLinkedinUrl.trim() || 'https://in.linkedin.com/in/angad-ranjan-057616380',
-      });
-      setCreatorSavedSuccess(true);
-      setTimeout(() => setCreatorSavedSuccess(false), 3000);
-    } finally {
-      setIsSavingCreator(false);
     }
   };
 
@@ -487,20 +464,25 @@ export function SettingsView({
       {/* Creator & Social Profiles Card */}
       <Card>
         <CardHeader>
-          <div className="flex items-center gap-2">
-            <GraduationCap className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
-            <CardTitle>Creator & Social Profiles</CardTitle>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <GraduationCap className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
+              <CardTitle>Creator & Social Profiles</CardTitle>
+            </div>
+            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-indigo-50 text-indigo-700 dark:bg-indigo-950/60 dark:text-indigo-300 border border-indigo-200/60 dark:border-indigo-800/60">
+              <Shield className="w-3 h-3" /> Platform Creator
+            </span>
           </div>
           <CardDescription>
             Official GitHub and LinkedIn handles for the creator of ScholarSync.
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleSaveCreatorLinks} className="space-y-4">
+          <div className="space-y-4">
             {/* Quick action buttons */}
             <div className="flex flex-wrap items-center gap-2.5 pb-2 border-b border-slate-100 dark:border-slate-800">
               <a
-                href={creatorGithubUrl}
+                href={PLATFORM_CREATOR.githubUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold bg-slate-900 text-white hover:bg-slate-800 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-white transition-all shadow-sm"
@@ -511,7 +493,7 @@ export function SettingsView({
               </a>
 
               <a
-                href={creatorLinkedinUrl}
+                href={PLATFORM_CREATOR.linkedinUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold bg-[#0a66c2] text-white hover:bg-[#004182] transition-all shadow-sm"
@@ -522,49 +504,57 @@ export function SettingsView({
               </a>
             </div>
 
+            {/* Read-only profile overview */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-              <Input
-                label="Creator Name"
-                value={creatorName}
-                onChange={(e) => setCreatorName(e.target.value)}
-                placeholder="e.g. Angad"
-                helperText="Displayed in the sidebar, header, and mobile navigation."
-              />
-
-              <Input
-                label="GitHub URL or Username"
-                value={creatorGithubUrl}
-                onChange={(e) => setCreatorGithubUrl(e.target.value)}
-                placeholder="https://github.com/your-username"
-                helperText="Link to creator's GitHub profile repository."
-              />
-
-              <Input
-                label="LinkedIn Profile URL"
-                value={creatorLinkedinUrl}
-                onChange={(e) => setCreatorLinkedinUrl(e.target.value)}
-                placeholder="https://linkedin.com/in/your-profile"
-                helperText="Link to creator's LinkedIn profile."
-              />
-            </div>
-
-            <div className="flex items-center justify-between pt-1">
-              {creatorSavedSuccess ? (
-                <div className="flex items-center gap-1.5 text-xs text-emerald-600 dark:text-emerald-400 font-medium">
-                  <CheckCircle2 className="w-4 h-4" />
-                  Creator social links saved successfully!
-                </div>
-              ) : (
-                <span className="text-[11px] text-slate-400">
-                  Links update automatically across the entire app interface.
+              <div className="p-3.5 rounded-xl border border-slate-200/70 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/30">
+                <span className="text-[11px] font-medium text-slate-500 dark:text-slate-400 block mb-1">
+                  Creator Name
                 </span>
-              )}
+                <div className="font-semibold text-slate-900 dark:text-slate-100 text-sm flex items-center gap-1.5">
+                  <span>{PLATFORM_CREATOR.name}</span>
+                  <CheckCircle2 className="w-4 h-4 text-emerald-500" />
+                </div>
+                <span className="text-[10px] text-slate-400 mt-1 block">Lead Developer & Maintainer</span>
+              </div>
 
-              <Button type="submit" variant="primary" size="sm" isLoading={isSavingCreator}>
-                Save Creator Links
-              </Button>
+              <div className="p-3.5 rounded-xl border border-slate-200/70 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/30">
+                <span className="text-[11px] font-medium text-slate-500 dark:text-slate-400 block mb-1">
+                  GitHub Profile
+                </span>
+                <a
+                  href={PLATFORM_CREATOR.githubUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-medium text-indigo-600 dark:text-indigo-400 text-xs hover:underline flex items-center gap-1 truncate"
+                >
+                  <span className="truncate">{PLATFORM_CREATOR.githubUrl.replace('https://', '')}</span>
+                  <ExternalLink className="w-3 h-3 shrink-0 opacity-60" />
+                </a>
+                <span className="text-[10px] text-slate-400 mt-1 block">Official Code Repository</span>
+              </div>
+
+              <div className="p-3.5 rounded-xl border border-slate-200/70 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/30">
+                <span className="text-[11px] font-medium text-slate-500 dark:text-slate-400 block mb-1">
+                  LinkedIn Profile
+                </span>
+                <a
+                  href={PLATFORM_CREATOR.linkedinUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-medium text-[#0a66c2] text-xs hover:underline flex items-center gap-1 truncate"
+                >
+                  <span className="truncate">{PLATFORM_CREATOR.linkedinUrl.replace('https://', '')}</span>
+                  <ExternalLink className="w-3 h-3 shrink-0 opacity-60" />
+                </a>
+                <span className="text-[10px] text-slate-400 mt-1 block">Professional Network</span>
+              </div>
             </div>
-          </form>
+
+            <div className="flex items-center gap-2 pt-1 text-[11px] text-slate-500 dark:text-slate-400">
+              <Shield className="w-3.5 h-3.5 text-indigo-500" />
+              <span>Platform creator details are verified and protected across all visitor sessions.</span>
+            </div>
+          </div>
         </CardContent>
       </Card>
 

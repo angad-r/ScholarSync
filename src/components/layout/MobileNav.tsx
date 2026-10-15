@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import { NavigationTab } from './Sidebar';
 import { cn } from '../../lib/utils';
+import { PLATFORM_CREATOR } from '../../config/creator';
 
 interface MobileNavProps {
   isOpen: boolean;
@@ -35,9 +36,9 @@ export function MobileNav({
   currentTab,
   onSelectTab,
   semesterText,
-  creatorName = 'Angad Ranjan',
-  creatorGithubUrl = 'https://github.com/angad-r',
-  creatorLinkedinUrl = 'https://in.linkedin.com/in/angad-ranjan-057616380',
+  creatorName = PLATFORM_CREATOR.name,
+  creatorGithubUrl = PLATFORM_CREATOR.githubUrl,
+  creatorLinkedinUrl = PLATFORM_CREATOR.linkedinUrl,
 }: MobileNavProps) {
   if (!isOpen) return null;
 

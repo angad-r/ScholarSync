@@ -135,9 +135,6 @@ export interface UserSettings {
   isOnboarded: boolean;
   theme: 'light' | 'dark' | 'system';
   browserNotificationsEnabled: boolean;
-  creatorName?: string;
-  creatorGithubUrl?: string;
-  creatorLinkedinUrl?: string;
 }
 
 export interface InAppNotification {

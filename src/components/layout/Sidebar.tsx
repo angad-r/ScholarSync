@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import { cn } from '../../lib/utils';
 import { Badge } from '../common/Badge';
+import { PLATFORM_CREATOR } from '../../config/creator';
 
 export type NavigationTab =
   | 'dashboard'
@@ -45,9 +46,9 @@ export function Sidebar({
   onSelectTab,
   semesterText,
   isDemoActive = false,
-  creatorName = 'Angad Ranjan',
-  creatorGithubUrl = 'https://github.com/angad-r',
-  creatorLinkedinUrl = 'https://in.linkedin.com/in/angad-ranjan-057616380',
+  creatorName = PLATFORM_CREATOR.name,
+  creatorGithubUrl = PLATFORM_CREATOR.githubUrl,
+  creatorLinkedinUrl = PLATFORM_CREATOR.linkedinUrl,
 }: SidebarProps) {
   const navItems = [
     { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },

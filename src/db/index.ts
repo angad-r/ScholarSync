@@ -62,19 +62,27 @@ export const DEFAULT_USER_SETTINGS: UserSettings = {
   isOnboarded: false,
   theme: 'system',
   browserNotificationsEnabled: false,
-  creatorName: 'Angad Ranjan',
-  creatorGithubUrl: 'https://github.com/angad-r',
-  creatorLinkedinUrl: 'https://in.linkedin.com/in/angad-ranjan-057616380',
 };
 
 export async function getUserSettings(): Promise<UserSettings> {
   const record = await db.userSettings.get('settings');
-  return record || DEFAULT_USER_SETTINGS;
+  if (!record) return DEFAULT_USER_SETTINGS;
+  const { id: _id, creatorName: _c1, creatorGithubUrl: _c2, creatorLinkedinUrl: _c3, ...clean } = record as any;
+  return clean as UserSettings;
 }
 
 export async function updateUserSettings(settings: Partial<UserSettings>): Promise<UserSettings> {
   const current = (await db.userSettings.get('settings')) || DEFAULT_USER_SETTINGS;
-  const updated = { ...current, ...settings, id: 'settings' };
+  // Ensure platform creator properties can never be injected or overwritten via user settings
+  const { creatorName: _c1, creatorGithubUrl: _c2, creatorLinkedinUrl: _c3, ...cleanSettings } = settings as any;
+  const updated: UserSettings & { id: string } = {
+    ...current,
+    ...cleanSettings,
+    id: 'settings',
+  };
+  delete (updated as any).creatorName;
+  delete (updated as any).creatorGithubUrl;
+  delete (updated as any).creatorLinkedinUrl;
   await db.userSettings.put(updated);
   return updated;
 }

@@ -178,6 +178,12 @@ export async function exportDatabaseToJson(): Promise<string> {
     db.userSettings.get('settings'),
   ]);
 
+  let sanitizedSettings: UserSettings | undefined;
+  if (settings) {
+    const { id: _id, creatorName: _c1, creatorGithubUrl: _c2, creatorLinkedinUrl: _c3, ...clean } = settings as any;
+    sanitizedSettings = clean as UserSettings;
+  }
+
   const payload: BackupFilePayload = {
     appName: 'ScholarSync',
     schemaVersion: CURRENT_BACKUP_SCHEMA_VERSION,
@@ -189,7 +195,7 @@ export async function exportDatabaseToJson(): Promise<string> {
       timetableSessions,
       studyPlans,
       academicEvents: events,
-      userSettings: settings,
+      userSettings: sanitizedSettings,
     },
   };
 
@@ -338,7 +344,8 @@ export async function applyImport(
       ]);
 
       if (payload.data.userSettings) {
-        await updateUserSettings(payload.data.userSettings);
+        const { creatorName: _c1, creatorGithubUrl: _c2, creatorLinkedinUrl: _c3, ...cleanSettings } = payload.data.userSettings as any;
+        await updateUserSettings(cleanSettings);
       }
     }
   );

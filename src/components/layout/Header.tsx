@@ -18,6 +18,7 @@ import { Badge } from '../common/Badge';
 import { NavigationTab } from './Sidebar';
 import { InAppNotification } from '../../types';
 import { cn } from '../../lib/utils';
+import { PLATFORM_CREATOR } from '../../config/creator';
 
 interface HeaderProps {
   currentTab: NavigationTab;
@@ -85,9 +86,9 @@ export function Header({
   theme,
   onToggleTheme,
   hasSubjects,
-  creatorName = 'Angad Ranjan',
-  creatorGithubUrl = 'https://github.com/angad-r',
-  creatorLinkedinUrl = 'https://in.linkedin.com/in/angad-ranjan-057616380',
+  creatorName = PLATFORM_CREATOR.name,
+  creatorGithubUrl = PLATFORM_CREATOR.githubUrl,
+  creatorLinkedinUrl = PLATFORM_CREATOR.linkedinUrl,
 }: HeaderProps) {
   const [showNotificationPanel, setShowNotificationPanel] = useState(false);
   const info = TAB_TITLES[currentTab];
